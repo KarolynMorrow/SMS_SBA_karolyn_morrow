@@ -64,8 +64,9 @@ public class SMSRunner {
         if (student != null && isStudent) {
             List<Course> courses = studentService.getStudentCourse(email);
             System.out.println("My classes:");
+            System.out.printf("%-5s%-35s%-10s\n", "ID", "Course", "Instructor");
             for (Course course : courses) {
-                System.out.println(course);
+                System.out.printf("%-5s%-35s%-10s\n", course.getcId(), course.getcName(), course.getcInstructorName());
             }
         } else {
             System.out.println("User validation failed.");
@@ -84,7 +85,7 @@ public class SMSRunner {
         if (num == 1) {
             List<Course> allCourses = courseService.getAllCourses();
 //            List<Course> studentCourses = studentService.getStudentCourse(currentStudent.getsEmail());
-//            allCourses.removeAll(studentCourses);
+//          allCourses.removeAll(studentCourses);
             System.out.printf("%-5s%-35s%-10s\n", "ID", "Course", "Instructor");
             for (Course course : allCourses) {
                 System.out.printf("%-5s%-35s%-10s\n", course.getcId(), course.getcName(), course.getcInstructorName());
