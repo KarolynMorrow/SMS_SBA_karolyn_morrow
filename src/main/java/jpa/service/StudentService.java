@@ -24,9 +24,9 @@ public class StudentService implements StudentDao {
         try {
             List<Student> students = session.createNativeQuery("Select * from student", Student.class).getResultList();
             return students;
-        }catch(NoResultException e){
+        } catch (NoResultException e) {
             return null;
-        }finally {
+        } finally {
             tx.commit();
             factory.close();
             session.close();
@@ -42,9 +42,9 @@ public class StudentService implements StudentDao {
         try {
             Student student = session.find(Student.class, email);
             return student;
-        }catch(NoResultException | NullPointerException exception){
+        } catch (NoResultException | NullPointerException exception) {
             System.out.println("No student found with provided credentials");
-        }finally {
+        } finally {
             tx.commit();
             factory.close();
             session.close();
@@ -66,7 +66,7 @@ public class StudentService implements StudentDao {
             } else {
                 return false;
             }
-        } catch (NoResultException|NullPointerException e) {
+        } catch (NoResultException | NullPointerException e) {
             System.out.println("Credentials are invalid");
         } finally {
             tx.commit();
@@ -76,6 +76,7 @@ public class StudentService implements StudentDao {
         }
         return false;
     }
+
     //if Studentoption1:register is chosen print all available courses verifying student
     // is not already registered in chosen class
     @Override
@@ -84,21 +85,22 @@ public class StudentService implements StudentDao {
 
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
-
-        try{
-            session.get(Student.class, sEmail); //get student based on (email) id
+        try {
+            Student student = session.get(Student.class, sEmail); //get student based on (email) id
             List<Course> studentCourseList = getStudentCourse(sEmail); //get courses of registered student
-            if (studentCourseList.contains(cId)){
+            if (studentCourseList.contains(cId)) {
                 System.out.println("Student is already registered for course");
-            }else{
-                Course chosenCourse = session.get(Course.class, cId);
-                studentCourseList.add(chosenCourse);
+            } else {
+                Course chosenCourse = session.get(Course.class, cId); //get course
+                studentCourseList.add(chosenCourse);//and add it to registered course list
+                student.setsCourses(studentCourseList);
+                session.saveOrUpdate(studentCourseList);
             }
 
-        }catch(NullPointerException|NoResultException exception){
+        } catch (NullPointerException | NoResultException exception) {
             System.out.println("Unable to register to this course");
 
-        }finally{
+        } finally {
             tx.commit();
             factory.close();
             session.close();
@@ -111,13 +113,11 @@ public class StudentService implements StudentDao {
 
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
-        try{
+        try {
             return session.get(Student.class, email).getsCourses();
-
-        }catch(NullPointerException e){
-            System.out.println("Student is not registered for any classes");
-
-        }finally{
+        } catch (NullPointerException e) {
+            System.out.println("Student is not registered for any classes.");
+        } finally {
             tx.commit();
             factory.close();
             session.close();

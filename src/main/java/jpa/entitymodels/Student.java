@@ -1,7 +1,7 @@
 package jpa.entitymodels;
 
 import com.sun.istack.NotNull;
-
+import org.hibernate.*;
 import javax.persistence.*;
 import java.util.List;
 
@@ -21,8 +21,7 @@ public class Student {
     @OneToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "studentcourse",
-            joinColumns = {@JoinColumn(name = "sEmail", referencedColumnName = "email", unique = false)},
-            inverseJoinColumns = {@JoinColumn(name = "cId", referencedColumnName = "id", unique = false)})
+            joinColumns = {@JoinColumn(name = "sEmail", referencedColumnName = "email")})
     private List<Course> sCourses;
 
     public Student() {
