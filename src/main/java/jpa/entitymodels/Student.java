@@ -18,7 +18,11 @@ public class Student {
     @Column(name = "password")
     private String sPass;
 
-    @OneToMany(mappedBy = "cId", fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "studentcourse",
+            joinColumns = {@JoinColumn(name = "sEmail", referencedColumnName = "email", unique = false)},
+            inverseJoinColumns = {@JoinColumn(name = "cId", referencedColumnName = "id", unique = false)})
     private List<Course> sCourses;
 
     public Student() {
